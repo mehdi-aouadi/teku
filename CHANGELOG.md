@@ -28,6 +28,7 @@ For information on changes in released versions of Teku, see the [releases page]
 - Removed the experimental flag from `/eth/v1/validator/liveness/:epoch` rest-api endpoint.
 - Following on from the non finality issue, improved state selection during attestation validation, 
   where we failed to correctly identify that we could use the head state for validation of canonical attestation gossip.
+- Add `--data-storage-non-canonical-blob-sidecars-enabled` beacon node option (set to `false` by default) which enables storing non-canonical blob sidecars when set to `true`. This option would be useful only when `DENEB` milestone is reached.
 
 ### Bug Fixes
 
