@@ -13,6 +13,7 @@ the [releases page](https://github.com/Consensys/teku/releases).
 
 ### Additions and Improvements
 - Added `--ee-jwt-claim-id` command line option to provide `id` to the execution engine JWT claims
+- Added `--stop-vc-when-validator-slashed` option to stop the VC when a validator is slashed
 
 ### Bug Fixes
 - Fixed the command line help not displaying `--checkpoint-sync-url` as an option. [#7823](https://github.com/Consensys/teku/issues/7823)

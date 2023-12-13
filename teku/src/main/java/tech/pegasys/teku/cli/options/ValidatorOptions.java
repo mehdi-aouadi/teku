@@ -142,9 +142,9 @@ public class ValidatorOptions {
       ValidatorConfig.DEFAULT_EXIT_WHEN_NO_VALIDATOR_KEYS_ENABLED;
 
   @Option(
-      names = {"--Xstop-vc-when-validator-slashed"},
+      names = {"--stop-vc-when-validator-slashed"},
       paramLabel = "<BOOLEAN>",
-      description = "Enable stopping the Vc when a validator is slashed",
+      description = "Enable stopping the VC when a validator is slashed",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS,
       arity = "0..1",
       fallbackValue = "true")
