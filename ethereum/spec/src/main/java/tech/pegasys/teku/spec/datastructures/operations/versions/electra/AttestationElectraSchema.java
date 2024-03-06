@@ -47,6 +47,7 @@ public class AttestationElectraSchema
         namedSchema("signature", SszSignatureSchema.INSTANCE));
   }
 
+  @SuppressWarnings("unchecked")
   public SszListSchema<SszList<SszBitvector>, ?> getAggregationBitsSchema() {
     return (SszListSchema<SszList<SszBitvector>, ?>) getFieldSchema0();
   }
