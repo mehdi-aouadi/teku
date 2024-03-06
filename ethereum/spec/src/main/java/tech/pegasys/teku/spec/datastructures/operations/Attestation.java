@@ -28,11 +28,12 @@ import tech.pegasys.teku.spec.config.SpecConfig;
 import tech.pegasys.teku.spec.datastructures.type.SszSignature;
 import tech.pegasys.teku.spec.datastructures.type.SszSignatureSchema;
 
-public class Attestation
-    extends Container3<Attestation, SszBitlist, AttestationData, SszSignature> {
+public class Attestation extends Container3<Attestation, SszBitlist, AttestationData, SszSignature>
+    implements AttestationContainer {
 
   public static class AttestationSchema
-      extends ContainerSchema3<Attestation, SszBitlist, AttestationData, SszSignature> {
+      extends ContainerSchema3<Attestation, SszBitlist, AttestationData, SszSignature>
+      implements AttestationContainerSchema<Attestation> {
 
     public AttestationSchema(final SpecConfig specConfig) {
       super(
