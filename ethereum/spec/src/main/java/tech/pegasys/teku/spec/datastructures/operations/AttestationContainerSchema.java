@@ -13,20 +13,13 @@
 
 package tech.pegasys.teku.spec.datastructures.operations;
 
-import java.util.Optional;
-import tech.pegasys.teku.infrastructure.ssz.SszContainer;
-import tech.pegasys.teku.infrastructure.ssz.SszData;
-import tech.pegasys.teku.infrastructure.ssz.SszList;
-import tech.pegasys.teku.infrastructure.ssz.collections.SszBitlist;
+import tech.pegasys.teku.infrastructure.ssz.schema.SszContainerSchema;
 
-public interface AttestationContainer extends SszData, SszContainer {
-  AttestationData getData();
+public interface AttestationContainerSchema<T extends AttestationContainer>
+    extends SszContainerSchema<T> {
 
-  default Optional<SszBitlist> getAggregationBits() {
-    return Optional.empty();
-  }
-
-  default Optional<SszList<SszBitlist>> getAggregationBitsElectra() {
-    return Optional.empty();
+  @SuppressWarnings("unchecked")
+  default AttestationContainerSchema<AttestationContainer> castTypeToAttestationContainer() {
+    return (AttestationContainerSchema<AttestationContainer>) this;
   }
 }
