@@ -40,6 +40,7 @@ import tech.pegasys.teku.spec.datastructures.execution.ExecutionPayloadHeaderSch
 import tech.pegasys.teku.spec.datastructures.execution.ExecutionPayloadSchema;
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadHeaderSchemaElectra;
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadSchemaElectra;
+import tech.pegasys.teku.spec.datastructures.operations.versions.electra.AttestationElectraSchema;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.BeaconStateSchema;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.versions.electra.BeaconStateElectra;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.versions.electra.BeaconStateSchemaElectra;
@@ -67,6 +68,8 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
   private final SignedBlockContentsSchema signedBlockContentsSchema;
   private final BlobsBundleSchema blobsBundleSchema;
   private final ExecutionPayloadAndBlobsBundleSchema executionPayloadAndBlobsBundleSchema;
+
+  private final AttestationElectraSchema attestationElectraSchema;
 
   public SchemaDefinitionsElectra(final SpecConfigElectra specConfig) {
     super(specConfig);
@@ -115,6 +118,7 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
             "BlobsBundleElectra", getBlobSchema(), getBlobKzgCommitmentsSchema(), specConfig);
     this.executionPayloadAndBlobsBundleSchema =
         new ExecutionPayloadAndBlobsBundleSchema(executionPayloadSchemaElectra, blobsBundleSchema);
+    this.attestationElectraSchema = new AttestationElectraSchema(specConfig);
   }
 
   public static SchemaDefinitionsElectra required(final SchemaDefinitions schemaDefinitions) {
@@ -235,5 +239,9 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
   @Override
   public Optional<SchemaDefinitionsElectra> toVersionElectra() {
     return Optional.of(this);
+  }
+
+  public AttestationElectraSchema getAttestationElectraSchema() {
+    return attestationElectraSchema;
   }
 }
