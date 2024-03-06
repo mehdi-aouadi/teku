@@ -94,7 +94,8 @@ class MatchingDataAttestationGroup implements Iterable<ValidatableAttestation> {
    * @return True if the attestation was added, false otherwise
    */
   public boolean add(final ValidatableAttestation attestation) {
-    if (includedValidators.isSuperSetOf(attestation.getAttestation().getAggregationBits().orElseThrow())) {
+    if (includedValidators.isSuperSetOf(
+        attestation.getAttestation().getAggregationBits().orElseThrow())) {
       // All attestation bits have already been included on chain
       return false;
     }
@@ -168,7 +169,8 @@ class MatchingDataAttestationGroup implements Iterable<ValidatableAttestation> {
       for (Iterator<ValidatableAttestation> iterator = candidates.iterator();
           iterator.hasNext(); ) {
         ValidatableAttestation candidate = iterator.next();
-        if (includedValidators.isSuperSetOf(candidate.getAttestation().getAggregationBits().orElseThrow())) {
+        if (includedValidators.isSuperSetOf(
+            candidate.getAttestation().getAggregationBits().orElseThrow())) {
           iterator.remove();
           numRemoved++;
         }

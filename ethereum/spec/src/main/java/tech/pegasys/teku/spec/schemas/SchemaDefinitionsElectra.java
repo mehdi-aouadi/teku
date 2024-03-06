@@ -45,6 +45,7 @@ import tech.pegasys.teku.spec.datastructures.execution.versions.electra.Executio
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadHeaderSchemaElectra;
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadSchemaElectra;
 import tech.pegasys.teku.spec.datastructures.operations.versions.electra.AttestationElectraSchema;
+import tech.pegasys.teku.spec.datastructures.operations.versions.electra.IndexedAttestationElectraSchema;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.BeaconStateSchema;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.versions.electra.BeaconStateElectra;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.versions.electra.BeaconStateSchemaElectra;
@@ -78,6 +79,7 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
   private final ExecutionLayerExitSchema executionLayerExitSchema;
 
   private final AttestationElectraSchema attestationElectraSchema;
+  private final IndexedAttestationElectraSchema indexedAttestationElectraSchema;
 
   public SchemaDefinitionsElectra(final SpecConfigElectra specConfig) {
     super(specConfig);
@@ -130,6 +132,7 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
     this.depositReceiptSchema = DepositReceipt.SSZ_SCHEMA;
     this.executionLayerExitSchema = ExecutionLayerExit.SSZ_SCHEMA;
     this.attestationElectraSchema = new AttestationElectraSchema(specConfig);
+    this.indexedAttestationElectraSchema = new IndexedAttestationElectraSchema(specConfig);
   }
 
   public static SchemaDefinitionsElectra required(final SchemaDefinitions schemaDefinitions) {
@@ -262,5 +265,9 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
 
   public AttestationElectraSchema getAttestationElectraSchema() {
     return attestationElectraSchema;
+  }
+
+  public IndexedAttestationElectraSchema getIndexedAttestationElectraSchema() {
+    return indexedAttestationElectraSchema;
   }
 }
