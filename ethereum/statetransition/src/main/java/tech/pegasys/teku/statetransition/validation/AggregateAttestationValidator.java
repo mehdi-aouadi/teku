@@ -87,7 +87,8 @@ public class AggregateAttestationValidator {
       return completedFuture(ignore("Ignoring duplicate aggregate"));
     }
 
-    final SszBitlist aggregationBits = attestation.getAttestation().getAggregationBits().orElseThrow();
+    final SszBitlist aggregationBits =
+        attestation.getAttestation().getAggregationBits().orElseThrow();
     if (seenAggregationBits.isAlreadySeen(attestation.getData().hashTreeRoot(), aggregationBits)) {
       return completedFuture(ignore("Ignoring duplicate aggregate based on aggregation bits"));
     }
