@@ -44,6 +44,11 @@ import tech.pegasys.teku.spec.datastructures.execution.versions.electra.Executio
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionLayerExitSchema;
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadHeaderSchemaElectra;
 import tech.pegasys.teku.spec.datastructures.execution.versions.electra.ExecutionPayloadSchemaElectra;
+import tech.pegasys.teku.spec.datastructures.operations.AttestationContainer;
+import tech.pegasys.teku.spec.datastructures.operations.AttestationContainerSchema;
+import tech.pegasys.teku.spec.datastructures.operations.AttesterSlashing.AttesterSlashingSchema;
+import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestationContainer;
+import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestationContainerSchema;
 import tech.pegasys.teku.spec.datastructures.operations.versions.electra.AttestationElectraSchema;
 import tech.pegasys.teku.spec.datastructures.operations.versions.electra.IndexedAttestationElectraSchema;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.BeaconStateSchema;
@@ -80,6 +85,7 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
 
   private final AttestationElectraSchema attestationElectraSchema;
   private final IndexedAttestationElectraSchema indexedAttestationElectraSchema;
+  private final AttesterSlashingSchema attesterSlashingSchema;
 
   public SchemaDefinitionsElectra(final SpecConfigElectra specConfig) {
     super(specConfig);
@@ -133,6 +139,9 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
     this.executionLayerExitSchema = ExecutionLayerExit.SSZ_SCHEMA;
     this.attestationElectraSchema = new AttestationElectraSchema(specConfig);
     this.indexedAttestationElectraSchema = new IndexedAttestationElectraSchema(specConfig);
+    this.attesterSlashingSchema =
+        new AttesterSlashingSchema(
+            indexedAttestationElectraSchema.castTypeToIndexedAttestationContainer());
   }
 
   public static SchemaDefinitionsElectra required(final SchemaDefinitions schemaDefinitions) {
@@ -200,6 +209,26 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
     return getSignedBlindedBeaconBlockSchema().castTypeToSignedBlockContainer();
   }
 
+  public IndexedAttestationElectraSchema getIndexedAttestationElectraSchema() {
+    return indexedAttestationElectraSchema;
+  }
+
+  @Override
+  public IndexedAttestationContainerSchema<IndexedAttestationContainer>
+      getIndexedAttestationContainerSchema() {
+    return indexedAttestationElectraSchema.castTypeToIndexedAttestationContainer();
+  }
+
+  @Override
+  public AttesterSlashingSchema getAttesterSlashingSchema() {
+    return attesterSlashingSchema;
+  }
+
+  @Override
+  public AttestationContainerSchema<AttestationContainer> getAttestationContainerSchema() {
+    return getAttestationElectraSchema().castTypeToAttestationContainer();
+  }
+
   @Override
   public ExecutionPayloadSchema<?> getExecutionPayloadSchema() {
     return executionPayloadSchemaElectra;
@@ -265,9 +294,5 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
 
   public AttestationElectraSchema getAttestationElectraSchema() {
     return attestationElectraSchema;
-  }
-
-  public IndexedAttestationElectraSchema getIndexedAttestationElectraSchema() {
-    return indexedAttestationElectraSchema;
   }
 }

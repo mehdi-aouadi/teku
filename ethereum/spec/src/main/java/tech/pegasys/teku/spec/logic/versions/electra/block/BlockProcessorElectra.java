@@ -15,10 +15,9 @@ package tech.pegasys.teku.spec.logic.versions.electra.block;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.List;
 import java.util.Optional;
-
-import it.unimi.dsi.fastutil.ints.IntList;
 import tech.pegasys.teku.bls.BLSSignatureVerifier;
 import tech.pegasys.teku.infrastructure.ssz.SszList;
 import tech.pegasys.teku.infrastructure.ssz.collections.SszBitlist;
@@ -149,19 +148,20 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
           false);
     }
   }
+
   @Override
   public void processAttestations(
-          final MutableBeaconState state,
-          final SszList<Attestation> attestations,
-          final BLSSignatureVerifier signatureVerifier)
-          throws BlockProcessingException {
+      final MutableBeaconState state,
+      final SszList<Attestation> attestations,
+      final BLSSignatureVerifier signatureVerifier)
+      throws BlockProcessingException {
     final CapturingIndexedAttestationCache indexedAttestationCache =
-            IndexedAttestationCache.capturing();
+        IndexedAttestationCache.capturing();
     processAttestationsNoVerification(state, attestations, indexedAttestationCache);
 
     final BlockValidationResult result =
-            verifyAttestationSignatures(
-                    state, attestations, signatureVerifier, indexedAttestationCache);
+        verifyAttestationSignatures(
+            state, attestations, signatureVerifier, indexedAttestationCache);
     if (!result.isValid()) {
       throw new BlockProcessingException(result.getFailureReason());
     }
@@ -169,64 +169,65 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
 
   @Override
   protected void processAttestationsNoVerification(
-          MutableBeaconState state,
-          SszList<Attestation> attestations,
-          IndexedAttestationCache indexedAttestationCache)
-          throws BlockProcessingException {
+      MutableBeaconState state,
+      SszList<Attestation> attestations,
+      IndexedAttestationCache indexedAttestationCache)
+      throws BlockProcessingException {
     final IndexedAttestationProvider indexedAttestationProvider =
-            createIndexedAttestationProvider(state, indexedAttestationCache);
+        createIndexedAttestationProvider(state, indexedAttestationCache);
     safelyProcess(
-            () -> {
-              for (Attestation attestation : attestations) {
-                // Validate
-                assertAttestationValid(state, attestation);
-                processAttestation(state, attestation, indexedAttestationProvider);
-              }
-            });
+        () -> {
+          for (Attestation attestation : attestations) {
+            // Validate
+            assertAttestationValid(state, attestation);
+            processAttestation(state, attestation, indexedAttestationProvider);
+          }
+        });
   }
 
   @Override
   protected void assertAttestationValid(
-          final MutableBeaconState state, final AttestationContainer attestation) {
+      final MutableBeaconState state, final AttestationContainer attestation) {
     super.assertAttestationValid(state, attestation);
     final List<UInt64> committeeIndices = attestation.getCommitteeIndices().orElseThrow();
     final UInt64 committeeCountPerSlot =
-            beaconStateAccessors.getCommitteeCountPerSlot(
-                    state, attestation.getData().getTarget().getEpoch());
-    final SszList<SszBitlist> aggregationBits =
-            attestation.getAggregationBitsElectra().orElseThrow();
+        beaconStateAccessors.getCommitteeCountPerSlot(
+            state, attestation.getData().getTarget().getEpoch());
+    beaconStateAccessors.getCommitteeCountPerSlot(
+        state, attestation.getData().getTarget().getEpoch());
+    final SszList<SszBitlist> aggregationBits = attestation.getAggregationBitsElectraRequired();
     checkArgument(
-            committeeIndices.size() == aggregationBits.size(),
-            AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDICES_MISMATCH);
+        committeeIndices.size() == aggregationBits.size(),
+        AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDICES_MISMATCH);
     final Optional<OperationInvalidReason> committeeCheckResult =
-            checkCommittees(
-                    committeeIndices,
-                    committeeCountPerSlot,
-                    state,
-                    attestation.getData().getSlot(),
-                    aggregationBits);
+        checkCommittees(
+            committeeIndices,
+            committeeCountPerSlot,
+            state,
+            attestation.getData().getSlot(),
+            aggregationBits);
     if (committeeCheckResult.isPresent()) {
       throw new IllegalArgumentException(committeeCheckResult.get().describe());
     }
   }
 
   private Optional<OperationInvalidReason> checkCommittees(
-          final List<UInt64> committeeIndices,
-          final UInt64 committeeCountPerSlot,
-          final BeaconState state,
-          final UInt64 slot,
-          final SszList<SszBitlist> aggregationBits) {
+      final List<UInt64> committeeIndices,
+      final UInt64 committeeCountPerSlot,
+      final BeaconState state,
+      final UInt64 slot,
+      final SszList<SszBitlist> aggregationBits) {
     for (int index = 0; index < committeeIndices.size(); index++) {
       final UInt64 committeeIndex = committeeIndices.get(index);
       if (committeeIndex.compareTo(committeeCountPerSlot) < 0) {
         return Optional.of(
-                AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDEX_TOO_HIGH);
+            AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDEX_TOO_HIGH);
       }
       final IntList committee =
-              beaconStateAccessors.getBeaconCommittee(state, slot, committeeIndex);
+          beaconStateAccessors.getBeaconCommittee(state, slot, committeeIndex);
       if (committee.size() != aggregationBits.get(index).size()) {
         return Optional.of(
-                AttestationDataValidator.AttestationInvalidReason.COMMITTEE_COUNT_MISMATCH);
+            AttestationDataValidator.AttestationInvalidReason.COMMITTEE_COUNT_MISMATCH);
       }
     }
     return Optional.empty();
