@@ -97,6 +97,7 @@ public class SchemaDefinitionsElectra extends SchemaDefinitionsDeneb {
     this.indexedAttestationElectraSchema = new IndexedAttestationElectraSchema(specConfig);
     attesterSlashingSchema =
         new AttesterSlashingSchema(
+            "AttesterSlashingElectra",
             indexedAttestationElectraSchema.castTypeToIndexedAttestationContainer());
     this.beaconBlockBodySchema =
         BeaconBlockBodySchemaElectraImpl.create(
