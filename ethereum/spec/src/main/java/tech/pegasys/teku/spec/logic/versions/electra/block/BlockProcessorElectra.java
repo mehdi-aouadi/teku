@@ -38,7 +38,7 @@ import tech.pegasys.teku.spec.datastructures.state.beaconstate.versions.electra.
 import tech.pegasys.teku.spec.logic.common.helpers.BeaconStateMutators;
 import tech.pegasys.teku.spec.logic.common.helpers.Predicates;
 import tech.pegasys.teku.spec.logic.common.operations.OperationSignatureVerifier;
-import tech.pegasys.teku.spec.logic.common.operations.validation.AttestationDataValidator;
+import tech.pegasys.teku.spec.logic.common.operations.validation.AttestationDataValidator.AttestationInvalidReason;
 import tech.pegasys.teku.spec.logic.common.operations.validation.OperationInvalidReason;
 import tech.pegasys.teku.spec.logic.common.operations.validation.OperationValidator;
 import tech.pegasys.teku.spec.logic.common.statetransition.blockvalidator.BlockValidationResult;
@@ -195,10 +195,7 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
             state, attestation.getData().getTarget().getEpoch());
     beaconStateAccessors.getCommitteeCountPerSlot(
         state, attestation.getData().getTarget().getEpoch());
-    final SszList<SszBitlist> aggregationBits = attestation.getAggregationBitsElectraRequired();
-    checkArgument(
-        committeeIndices.size() == aggregationBits.size(),
-        AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDICES_MISMATCH);
+    final SszBitlist aggregationBits = attestation.getAggregationBitsElectraRequired();
     final Optional<OperationInvalidReason> committeeCheckResult =
         checkCommittees(
             committeeIndices,
@@ -216,19 +213,18 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
       final UInt64 committeeCountPerSlot,
       final BeaconState state,
       final UInt64 slot,
-      final SszList<SszBitlist> aggregationBits) {
-    for (int index = 0; index < committeeIndices.size(); index++) {
-      final UInt64 committeeIndex = committeeIndices.get(index);
+      final SszBitlist aggregationBits) {
+    int participantsCount = 0;
+    for (final UInt64 committeeIndex : committeeIndices) {
       if (committeeIndex.compareTo(committeeCountPerSlot) < 0) {
-        return Optional.of(
-            AttestationDataValidator.AttestationInvalidReason.COMMITTEE_INDEX_TOO_HIGH);
+        return Optional.of(AttestationInvalidReason.COMMITTEE_INDEX_TOO_HIGH);
       }
       final IntList committee =
           beaconStateAccessors.getBeaconCommittee(state, slot, committeeIndex);
-      if (committee.size() != aggregationBits.get(index).size()) {
-        return Optional.of(
-            AttestationDataValidator.AttestationInvalidReason.COMMITTEE_COUNT_MISMATCH);
-      }
+      participantsCount += committee.size();
+    }
+    if (participantsCount != aggregationBits.size()) {
+      return Optional.of(AttestationInvalidReason.PARTICIPANTS_COUNT_MISMATCH);
     }
     return Optional.empty();
   }
