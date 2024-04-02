@@ -53,7 +53,7 @@ import tech.pegasys.teku.spec.datastructures.operations.AttesterSlashing;
 import tech.pegasys.teku.spec.datastructures.operations.Deposit;
 import tech.pegasys.teku.spec.datastructures.operations.DepositData;
 import tech.pegasys.teku.spec.datastructures.operations.DepositMessage;
-import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestationContainer;
+import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestation;
 import tech.pegasys.teku.spec.datastructures.operations.ProposerSlashing;
 import tech.pegasys.teku.spec.datastructures.operations.SignedVoluntaryExit;
 import tech.pegasys.teku.spec.datastructures.state.Validator;
@@ -884,7 +884,7 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
   }
 
   public interface IndexedAttestationProvider {
-    IndexedAttestationContainer getIndexedAttestation(final AttestationContainer attestation);
+    IndexedAttestation getIndexedAttestation(final AttestationContainer attestation);
   }
 
   protected interface BlockProcessingAction {
