@@ -195,7 +195,7 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
             state, attestation.getData().getTarget().getEpoch());
     beaconStateAccessors.getCommitteeCountPerSlot(
         state, attestation.getData().getTarget().getEpoch());
-    final SszBitlist aggregationBits = attestation.getAggregationBitsElectraRequired();
+    final SszBitlist aggregationBits = attestation.getAggregationBits();
     final Optional<OperationInvalidReason> committeeCheckResult =
         checkCommittees(
             committeeIndices,
