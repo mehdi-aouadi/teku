@@ -148,8 +148,8 @@ import tech.pegasys.teku.spec.datastructures.operations.Deposit;
 import tech.pegasys.teku.spec.datastructures.operations.DepositData;
 import tech.pegasys.teku.spec.datastructures.operations.DepositMessage;
 import tech.pegasys.teku.spec.datastructures.operations.DepositWithIndex;
+import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestation;
 import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestation.IndexedAttestationSchema;
-import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestationContainer;
 import tech.pegasys.teku.spec.datastructures.operations.ProposerSlashing;
 import tech.pegasys.teku.spec.datastructures.operations.SignedAggregateAndProof;
 import tech.pegasys.teku.spec.datastructures.operations.SignedBlsToExecutionChange;
@@ -162,7 +162,6 @@ import tech.pegasys.teku.spec.datastructures.operations.versions.altair.SyncComm
 import tech.pegasys.teku.spec.datastructures.operations.versions.altair.SyncCommitteeMessage;
 import tech.pegasys.teku.spec.datastructures.operations.versions.bellatrix.BeaconPreparableProposer;
 import tech.pegasys.teku.spec.datastructures.operations.versions.electra.AttestationElectra;
-import tech.pegasys.teku.spec.datastructures.operations.versions.electra.IndexedAttestationElectraSchema;
 import tech.pegasys.teku.spec.datastructures.state.AnchorPoint;
 import tech.pegasys.teku.spec.datastructures.state.Checkpoint;
 import tech.pegasys.teku.spec.datastructures.state.Fork;
@@ -900,8 +899,8 @@ public final class DataStructureUtil {
   }
 
   public AttesterSlashing randomAttesterSlashing(final UInt64... attestingIndices) {
-    IndexedAttestationContainer attestation1 = randomIndexedAttestation(attestingIndices);
-    IndexedAttestationContainer attestation2 = randomIndexedAttestation(attestingIndices);
+    IndexedAttestation attestation1 = randomIndexedAttestation(attestingIndices);
+    IndexedAttestation attestation2 = randomIndexedAttestation(attestingIndices);
     return spec.getGenesisSchemaDefinitions()
         .getAttesterSlashingSchema()
         .create(attestation1, attestation2);
@@ -1521,33 +1520,21 @@ public final class DataStructureUtil {
         randomSignedBeaconBlockHeader(slot, proposerIndex));
   }
 
-  public IndexedAttestationContainer randomIndexedAttestation() {
+  public IndexedAttestation randomIndexedAttestation() {
     return randomIndexedAttestation(randomUInt64(), randomUInt64(), randomUInt64());
   }
 
-  public IndexedAttestationContainer randomIndexedAttestation(
-      final UInt64... attestingIndicesInput) {
+  public IndexedAttestation randomIndexedAttestation(final UInt64... attestingIndicesInput) {
     return randomIndexedAttestation(randomAttestationData(), attestingIndicesInput);
   }
 
-  public IndexedAttestationContainer randomIndexedAttestation(
+  public IndexedAttestation randomIndexedAttestation(
       final AttestationData data, final UInt64... attestingIndicesInput) {
-    if (spec.isMilestoneSupported(SpecMilestone.ELECTRA)) {
-      final IndexedAttestationElectraSchema indexedAttestationElectraSchema =
-          spec.getGenesisSchemaDefinitions()
-              .toVersionElectra()
-              .orElseThrow()
-              .getIndexedAttestationElectraSchema();
-      SszUInt64List attestingIndices =
-          indexedAttestationElectraSchema.getAttestingIndicesSchema().of(attestingIndicesInput);
-      return indexedAttestationElectraSchema.create(attestingIndices, data, randomSignature());
-    } else {
-      final IndexedAttestationSchema indexedAttestationSchema =
-          spec.getGenesisSchemaDefinitions().getIndexedAttestationSchema();
-      SszUInt64List attestingIndices =
-          indexedAttestationSchema.getAttestingIndicesSchema().of(attestingIndicesInput);
-      return indexedAttestationSchema.create(attestingIndices, data, randomSignature());
-    }
+    final IndexedAttestationSchema indexedAttestationSchema =
+        spec.getGenesisSchemaDefinitions().getIndexedAttestationSchema();
+    SszUInt64List attestingIndices =
+        indexedAttestationSchema.getAttestingIndicesSchema().of(attestingIndicesInput);
+    return indexedAttestationSchema.create(attestingIndices, data, randomSignature());
   }
 
   public DepositMessage randomDepositMessage(final BLSKeyPair keyPair) {

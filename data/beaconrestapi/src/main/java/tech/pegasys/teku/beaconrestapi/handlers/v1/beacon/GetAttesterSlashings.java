@@ -63,10 +63,8 @@ public class GetAttesterSlashings extends RestApiEndpoint {
   private static SerializableTypeDefinition<List<AttesterSlashing>> getResponseType(Spec spec) {
     final IndexedAttestation.IndexedAttestationSchema indexedAttestationSchema =
         new IndexedAttestation.IndexedAttestationSchema(spec.getGenesisSpecConfig());
-    // TODO Handle AttesterSlashingElectra
     final AttesterSlashing.AttesterSlashingSchema attesterSlashingSchema =
-        new AttesterSlashing.AttesterSlashingSchema(
-            "AttesterSlashing", indexedAttestationSchema.castTypeToIndexedAttestationContainer());
+        new AttesterSlashing.AttesterSlashingSchema(indexedAttestationSchema);
 
     return SerializableTypeDefinition.<List<AttesterSlashing>>object()
         .name("GetPoolAttesterSlashingsResponse")
