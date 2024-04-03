@@ -36,7 +36,7 @@ public class GetAttesterSlashings extends RestApiEndpoint {
   public static final String ROUTE = "/eth/v1/beacon/pool/attester_slashings";
   private final NodeDataProvider nodeDataProvider;
 
-  public GetAttesterSlashings(final DataProvider dataProvider, Spec spec) {
+  public GetAttesterSlashings(final DataProvider dataProvider, final Spec spec) {
     this(dataProvider.getNodeDataProvider(), spec);
   }
 
@@ -60,9 +60,11 @@ public class GetAttesterSlashings extends RestApiEndpoint {
     request.respondOk(attesterSlashings);
   }
 
-  private static SerializableTypeDefinition<List<AttesterSlashing>> getResponseType(Spec spec) {
+  private static SerializableTypeDefinition<List<AttesterSlashing>> getResponseType(
+      final Spec spec) {
+    //TODO handle electra indexed attestations
     final IndexedAttestation.IndexedAttestationSchema indexedAttestationSchema =
-        new IndexedAttestation.IndexedAttestationSchema(spec.getGenesisSpecConfig());
+        spec.getGenesisSchemaDefinitions().getIndexedAttestationSchema();
     final AttesterSlashing.AttesterSlashingSchema attesterSlashingSchema =
         new AttesterSlashing.AttesterSlashingSchema(indexedAttestationSchema);
 
