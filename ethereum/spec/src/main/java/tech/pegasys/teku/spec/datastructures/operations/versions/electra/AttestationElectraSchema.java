@@ -22,6 +22,7 @@ import tech.pegasys.teku.infrastructure.ssz.schema.SszListSchema;
 import tech.pegasys.teku.infrastructure.ssz.schema.collections.SszBitlistSchema;
 import tech.pegasys.teku.infrastructure.ssz.schema.collections.SszBitvectorSchema;
 import tech.pegasys.teku.infrastructure.ssz.tree.TreeNode;
+import tech.pegasys.teku.spec.config.SpecConfig;
 import tech.pegasys.teku.spec.datastructures.operations.AttestationContainerSchema;
 import tech.pegasys.teku.spec.datastructures.operations.AttestationData;
 import tech.pegasys.teku.spec.datastructures.type.SszSignature;
@@ -32,13 +33,17 @@ public class AttestationElectraSchema
         AttestationElectra, SszBitlist, AttestationData, SszBitvector, SszSignature>
     implements AttestationContainerSchema<AttestationElectra> {
 
-  public AttestationElectraSchema(
-      final long maxValidatorsPerAttestation, final long maxCommitteePerSlot) {
+  public AttestationElectraSchema(final SpecConfig specConfig) {
     super(
         "AttestationElectra",
-        namedSchema("aggregation_bits", SszBitlistSchema.create(maxValidatorsPerAttestation)),
+        namedSchema(
+            "aggregation_bits",
+            SszBitlistSchema.create(
+                (long) specConfig.getMaxValidatorsPerCommittee()
+                    * specConfig.getMaxCommitteesPerSlot())),
         namedSchema("data", AttestationData.SSZ_SCHEMA),
-        namedSchema("committee_bits", SszBitvectorSchema.create(maxCommitteePerSlot)),
+        namedSchema(
+            "committee_bits", SszBitvectorSchema.create(specConfig.getMaxCommitteesPerSlot())),
         namedSchema("signature", SszSignatureSchema.INSTANCE));
   }
 

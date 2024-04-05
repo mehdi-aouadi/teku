@@ -90,14 +90,12 @@ public class SchemaDefinitionsDeneb extends SchemaDefinitionsCapella {
     this.executionPayloadHeaderSchemaDeneb =
         beaconStateSchema.getLastExecutionPayloadHeaderSchema();
     this.blobKzgCommitmentsSchema = new BlobKzgCommitmentsSchema(specConfig);
-    final long maxValidatorPerAttestation = getMaxValidatorPerAttestation(specConfig);
     this.beaconBlockBodySchema =
         BeaconBlockBodySchemaDenebImpl.create(
             specConfig,
             getAttesterSlashingSchema(),
             getSignedBlsToExecutionChangeSchema(),
             blobKzgCommitmentsSchema,
-            maxValidatorPerAttestation,
             "BeaconBlockBodyDeneb");
     this.blindedBeaconBlockBodySchema =
         BlindedBeaconBlockBodySchemaDenebImpl.create(
@@ -105,7 +103,6 @@ public class SchemaDefinitionsDeneb extends SchemaDefinitionsCapella {
             getAttesterSlashingSchema(),
             getSignedBlsToExecutionChangeSchema(),
             blobKzgCommitmentsSchema,
-            maxValidatorPerAttestation,
             "BlindedBlockBodyDeneb");
     this.beaconBlockSchema = new BeaconBlockSchema(beaconBlockBodySchema, "BeaconBlockDeneb");
     this.blindedBeaconBlockSchema =

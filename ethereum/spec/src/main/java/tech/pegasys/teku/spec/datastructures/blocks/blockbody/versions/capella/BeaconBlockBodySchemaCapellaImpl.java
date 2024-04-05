@@ -93,7 +93,6 @@ public class BeaconBlockBodySchemaCapellaImpl
       final SpecConfigCapella specConfig,
       final AttesterSlashingSchema attesterSlashingSchema,
       final SignedBlsToExecutionChangeSchema blsToExecutionChangeSchema,
-      final long maxValidatorsPerAttestation,
       final String containerName) {
     return new BeaconBlockBodySchemaCapellaImpl(
         containerName,
@@ -110,8 +109,7 @@ public class BeaconBlockBodySchemaCapellaImpl
         namedSchema(
             BlockBodyFields.ATTESTATIONS,
             SszListSchema.create(
-                new AttestationSchema(maxValidatorsPerAttestation),
-                specConfig.getMaxAttestations())),
+                new AttestationSchema(specConfig), specConfig.getMaxAttestations())),
         namedSchema(
             BlockBodyFields.DEPOSITS,
             SszListSchema.create(Deposit.SSZ_SCHEMA, specConfig.getMaxDeposits())),

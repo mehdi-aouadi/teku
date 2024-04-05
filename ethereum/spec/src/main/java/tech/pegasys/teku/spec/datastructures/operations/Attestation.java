@@ -24,6 +24,7 @@ import tech.pegasys.teku.infrastructure.ssz.schema.collections.SszBitlistSchema;
 import tech.pegasys.teku.infrastructure.ssz.tree.TreeNode;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.Spec;
+import tech.pegasys.teku.spec.config.SpecConfig;
 import tech.pegasys.teku.spec.datastructures.type.SszSignature;
 import tech.pegasys.teku.spec.datastructures.type.SszSignatureSchema;
 
@@ -34,10 +35,12 @@ public class Attestation extends Container3<Attestation, SszBitlist, Attestation
       extends ContainerSchema3<Attestation, SszBitlist, AttestationData, SszSignature>
       implements AttestationContainerSchema<Attestation> {
 
-    public AttestationSchema(final long maxValidatorPerAttestation) {
+    public AttestationSchema(final SpecConfig specConfig) {
       super(
           "Attestation",
-          namedSchema("aggregation_bits", SszBitlistSchema.create(maxValidatorPerAttestation)),
+          namedSchema(
+              "aggregation_bits",
+              SszBitlistSchema.create(specConfig.getMaxValidatorsPerCommittee())),
           namedSchema("data", AttestationData.SSZ_SCHEMA),
           namedSchema("signature", SszSignatureSchema.INSTANCE));
     }

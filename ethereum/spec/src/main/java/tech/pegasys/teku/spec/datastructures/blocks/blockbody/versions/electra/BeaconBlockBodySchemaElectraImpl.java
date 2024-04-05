@@ -117,8 +117,7 @@ public class BeaconBlockBodySchemaElectraImpl
         namedSchema(
             BlockBodyFields.ATTESTATIONS,
             SszListSchema.create(
-                new AttestationSchema(maxValidatorsPerAttestation),
-                specConfig.getMaxAttestationsElectra())),
+                new AttestationSchema(specConfig), specConfig.getMaxAttestationsElectra())),
         namedSchema(
             BlockBodyFields.DEPOSITS,
             SszListSchema.create(Deposit.SSZ_SCHEMA, specConfig.getMaxDeposits())),

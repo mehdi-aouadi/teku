@@ -17,6 +17,7 @@ import tech.pegasys.teku.bls.BLSSignature;
 import tech.pegasys.teku.infrastructure.ssz.containers.Container2;
 import tech.pegasys.teku.infrastructure.ssz.containers.ContainerSchema2;
 import tech.pegasys.teku.infrastructure.ssz.tree.TreeNode;
+import tech.pegasys.teku.spec.config.SpecConfig;
 import tech.pegasys.teku.spec.datastructures.operations.AggregateAndProof.AggregateAndProofSchema;
 import tech.pegasys.teku.spec.datastructures.type.SszSignature;
 import tech.pegasys.teku.spec.datastructures.type.SszSignatureSchema;
@@ -27,10 +28,10 @@ public class SignedAggregateAndProof
   public static class SignedAggregateAndProofSchema
       extends ContainerSchema2<SignedAggregateAndProof, AggregateAndProof, SszSignature> {
 
-    public SignedAggregateAndProofSchema(final long maxValidatorsPerAttestation) {
+    public SignedAggregateAndProofSchema(final SpecConfig specConfig) {
       super(
           "SignedAggregateAndProof",
-          namedSchema("message", new AggregateAndProofSchema(maxValidatorsPerAttestation)),
+          namedSchema("message", new AggregateAndProofSchema(specConfig)),
           namedSchema("signature", SszSignatureSchema.INSTANCE));
     }
 

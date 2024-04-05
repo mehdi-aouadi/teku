@@ -86,7 +86,6 @@ public class BlindedBeaconBlockBodySchemaBellatrixImpl
   public static BlindedBeaconBlockBodySchemaBellatrixImpl create(
       final SpecConfigBellatrix specConfig,
       final AttesterSlashingSchema attesterSlashingSchema,
-      final long maxValidatorsPerAttestation,
       final String containerName,
       final ExecutionPayloadHeaderSchemaBellatrix executionPayloadHeaderSchema) {
     return new BlindedBeaconBlockBodySchemaBellatrixImpl(
@@ -104,8 +103,7 @@ public class BlindedBeaconBlockBodySchemaBellatrixImpl
         namedSchema(
             BlockBodyFields.ATTESTATIONS,
             SszListSchema.create(
-                new AttestationSchema(maxValidatorsPerAttestation),
-                specConfig.getMaxAttestations())),
+                new AttestationSchema(specConfig), specConfig.getMaxAttestations())),
         namedSchema(
             BlockBodyFields.DEPOSITS,
             SszListSchema.create(Deposit.SSZ_SCHEMA, specConfig.getMaxDeposits())),

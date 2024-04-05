@@ -39,8 +39,7 @@ public abstract class AbstractSchemaDefinitions implements SchemaDefinitions {
 
   public AbstractSchemaDefinitions(final SpecConfig specConfig) {
     this.historicalBatchSchema = new HistoricalBatchSchema(specConfig.getSlotsPerHistoricalRoot());
-    this.signedAggregateAndProofSchema =
-        new SignedAggregateAndProofSchema(getMaxValidatorPerAttestation(specConfig));
+    this.signedAggregateAndProofSchema = new SignedAggregateAndProofSchema(specConfig);
     this.indexedAttestationSchema =
         new IndexedAttestation.IndexedAttestationSchema(getMaxValidatorPerAttestation(specConfig));
     this.attesterSlashingSchema =

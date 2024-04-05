@@ -80,20 +80,17 @@ public class SchemaDefinitionsCapella extends SchemaDefinitionsBellatrix {
     this.beaconStateSchema = BeaconStateSchemaCapella.create(specConfig);
     this.executionPayloadHeaderSchemaCapella =
         beaconStateSchema.getLastExecutionPayloadHeaderSchema();
-    final long maxValidatorsPerAttestation = getMaxValidatorPerAttestation(specConfig);
     this.beaconBlockBodySchema =
         BeaconBlockBodySchemaCapellaImpl.create(
             specConfig,
             getAttesterSlashingSchema(),
             signedBlsToExecutionChangeSchema,
-            maxValidatorsPerAttestation,
             "BeaconBlockBodyCapella");
     this.blindedBeaconBlockBodySchema =
         BlindedBeaconBlockBodySchemaCapellaImpl.create(
             specConfig,
             getAttesterSlashingSchema(),
             signedBlsToExecutionChangeSchema,
-            maxValidatorsPerAttestation,
             "BlindedBlockBodyCapella");
     this.beaconBlockSchema = new BeaconBlockSchema(beaconBlockBodySchema, "BeaconBlockCapella");
     this.blindedBeaconBlockSchema =
