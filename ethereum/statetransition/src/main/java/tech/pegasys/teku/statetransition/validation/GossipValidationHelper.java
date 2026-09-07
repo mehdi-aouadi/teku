@@ -44,6 +44,7 @@ import tech.pegasys.teku.spec.logic.common.util.AttestationValidationResult;
 import tech.pegasys.teku.spec.logic.common.util.DataColumnSidecarUtil;
 import tech.pegasys.teku.spec.logic.versions.gloas.helpers.BeaconStateAccessorsGloas;
 import tech.pegasys.teku.spec.logic.versions.gloas.helpers.PredicatesGloas;
+import tech.pegasys.teku.statetransition.util.ShufflingDependentRootUtil;
 import tech.pegasys.teku.storage.client.ChainHead;
 import tech.pegasys.teku.storage.client.RecentChainData;
 
@@ -349,14 +350,13 @@ public class GossipValidationHelper {
 
   public Optional<Bytes32> getShufflingDependentRoot(
       final Bytes32 blockRoot, final UInt64 proposalSlot) {
-    final UInt64 proposalEpoch = spec.computeEpochAtSlot(proposalSlot);
-    final UInt64 minSeedLookahead =
-        UInt64.valueOf(spec.getSpecConfig(proposalEpoch).getMinSeedLookahead());
-    final UInt64 dependentSlot =
-        proposalEpoch.isLessThanOrEqualTo(minSeedLookahead)
-            ? UInt64.ZERO
-            : spec.computeStartSlotAtEpoch(proposalEpoch.minus(minSeedLookahead)).minus(ONE);
-    return getForkChoiceStrategy().getAncestor(blockRoot, dependentSlot);
+    final Optional<ReadOnlyForkChoiceStrategy> maybeForkChoiceStrategy =
+        recentChainData.getForkChoiceStrategy();
+    if (maybeForkChoiceStrategy == null || maybeForkChoiceStrategy.isEmpty()) {
+      return Optional.empty();
+    }
+    return ShufflingDependentRootUtil.getShufflingDependentRoot(
+        spec, maybeForkChoiceStrategy.get(), blockRoot, proposalSlot);
   }
 
   public boolean builderHasEnoughBalanceForBid(
