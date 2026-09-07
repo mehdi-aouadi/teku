@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static tech.pegasys.teku.infrastructure.async.SafeFutureAssert.assertThatSafeFuture;
@@ -201,7 +202,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
     assertThatSafeFuture(bidValidator.validate(signedBid))
         .isCompletedWithValue(
             saveBidForFuture(
-                signedBid, "no proposer preferences available. Saving for future processing"));
+                signedBid, "no proposer preferences available; saving for future processing"));
   }
 
   @TestTemplate
@@ -213,7 +214,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
         .isCompletedWithValue(
             saveBidForFuture(
                 signedBid,
-                "shuffling dependent root is unavailable. Saving for future processing"));
+                "shuffling dependent root is unavailable; saving for future processing"));
   }
 
   @TestTemplate
@@ -454,6 +455,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
                 signedBid,
                 "parent block with root %s is unknown; saving for future processing",
                 parentBlockRoot));
+    verify(gossipValidationHelper, never()).getShufflingDependentRoot(any(), any());
   }
 
   @TestTemplate
@@ -597,7 +599,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
         .isCompletedWithValue(
             ignoreBid(
                 signedBid,
-                "another bid for parent block hash %s and parent block root %s was processed concurrently",
+                "already received for parent block hash %s and parent block root %s",
                 parentBlockHash,
                 parentBlockRoot));
   }
