@@ -340,8 +340,7 @@ public class ExecutionPayloadBidGossipValidator {
                       BeaconStateGloas.required(state)
                           .getLatestExecutionPayloadBid()
                           .getBlockHash())) {
-                if (gossipValidationHelper.hasParentSignedExecutionPayloadBid(
-                    bid.getParentBlockRoot())) {
+                if (spec.isExecutionPayloadEnvelopeAvailableAtSlot(parentBlockSlot)) {
                   final Optional<SignedExecutionPayloadEnvelope> maybeParentPayload =
                       gossipValidationHelper.getRecentlyImportedExecutionPayload(
                           bid.getParentBlockRoot());

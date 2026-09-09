@@ -149,6 +149,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
     when(gossipValidationHelper.getParentStateInBlockEpoch(slot.decrement(), parentBlockRoot, slot))
         .thenReturn(SafeFuture.completedFuture(Optional.of(postState)));
     when(gossipValidationHelper.isActiveBuilder(builderIndex, postState, slot)).thenReturn(true);
+    when(spec.isExecutionPayloadEnvelopeAvailableAtSlot(slot.decrement())).thenReturn(true);
     when(gossipValidationHelper.getRandaoMixForCurrentEpoch(postState, slot))
         .thenReturn(bid.getPrevRandao());
     when(gossipValidationHelper.builderHasEnoughBalanceForBid(
@@ -513,8 +514,6 @@ public class ExecutionPayloadBidGossipValidatorTest {
         schemaDefinitions
             .getBuilderExitRequestSchema()
             .create(builder.getExecutionAddress(), builder.getPublicKey());
-    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
-        .thenReturn(true);
     when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
         .thenReturn(Optional.of(parentEnvelopeWithExits(matchingExit)));
     mockBidValidation(bidBuildingOnLatestPayload);
@@ -572,8 +571,6 @@ public class ExecutionPayloadBidGossipValidatorTest {
   @TestTemplate
   void shouldSaveForFuture_whenRequiredParentPayloadIsUnavailable() {
     final SignedExecutionPayloadBid bidBuildingOnLatestPayload = bidBuildingOnLatestPayload();
-    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
-        .thenReturn(true);
     when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
         .thenReturn(Optional.empty());
     mockBidValidation(bidBuildingOnLatestPayload);
@@ -588,8 +585,7 @@ public class ExecutionPayloadBidGossipValidatorTest {
   @TestTemplate
   void shouldAccept_whenParentPayloadIsUnavailableForPreGloasParent() {
     final SignedExecutionPayloadBid bidBuildingOnLatestPayload = bidBuildingOnLatestPayload();
-    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
-        .thenReturn(false);
+    when(spec.isExecutionPayloadEnvelopeAvailableAtSlot(slot.decrement())).thenReturn(false);
     when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
         .thenReturn(Optional.empty());
     mockBidValidation(bidBuildingOnLatestPayload);
