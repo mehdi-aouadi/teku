@@ -340,28 +340,32 @@ public class ExecutionPayloadBidGossipValidator {
                       BeaconStateGloas.required(state)
                           .getLatestExecutionPayloadBid()
                           .getBlockHash())) {
-                final Optional<SignedExecutionPayloadEnvelope> maybeParentPayload =
-                    gossipValidationHelper.getRecentlyImportedExecutionPayload(
-                        bid.getParentBlockRoot());
-                if (maybeParentPayload.isEmpty()) {
-                  return saveBidForFuture(
-                      bid, "parent execution payload is unavailable. Saving for future processing");
-                }
-                final boolean parentPayloadMayExitBuilder =
-                    ExecutionRequestsGloas.required(
-                            maybeParentPayload.get().getMessage().getExecutionRequests())
-                        .getBuilderExits()
-                        .stream()
-                        .anyMatch(
-                            request ->
-                                request.getPubkey().equals(builder.getPublicKey())
-                                    && request
-                                        .getSourceAddress()
-                                        .getWrappedBytes()
-                                        .equals(builder.getExecutionAddress().getWrappedBytes()));
-                if (parentPayloadMayExitBuilder) {
-                  return ignoreBid(
-                      bid, "parent payload may exit builder %s", bid.getBuilderIndex());
+                if (gossipValidationHelper.hasParentSignedExecutionPayloadBid(
+                    bid.getParentBlockRoot())) {
+                  final Optional<SignedExecutionPayloadEnvelope> maybeParentPayload =
+                      gossipValidationHelper.getRecentlyImportedExecutionPayload(
+                          bid.getParentBlockRoot());
+                  if (maybeParentPayload.isEmpty()) {
+                    return saveBidForFuture(
+                        bid,
+                        "parent execution payload is unavailable. Saving for future processing");
+                  }
+                  final boolean parentPayloadMayExitBuilder =
+                      ExecutionRequestsGloas.required(
+                              maybeParentPayload.get().getMessage().getExecutionRequests())
+                          .getBuilderExits()
+                          .stream()
+                          .anyMatch(
+                              request ->
+                                  request.getPubkey().equals(builder.getPublicKey())
+                                      && request
+                                          .getSourceAddress()
+                                          .getWrappedBytes()
+                                          .equals(builder.getExecutionAddress().getWrappedBytes()));
+                  if (parentPayloadMayExitBuilder) {
+                    return ignoreBid(
+                        bid, "parent payload may exit builder %s", bid.getBuilderIndex());
+                  }
                 }
               }
 

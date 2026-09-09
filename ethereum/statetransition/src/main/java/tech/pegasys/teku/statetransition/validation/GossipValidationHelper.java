@@ -367,6 +367,20 @@ public class GossipValidationHelper {
     return recentChainData.getStore().getExecutionPayloadIfAvailable(blockRoot);
   }
 
+  public Optional<SignedBeaconBlock> getRecentlyImportedBlock(final Bytes32 blockRoot) {
+    return recentChainData.getStore().getBlockIfAvailable(blockRoot);
+  }
+
+  // Pre Gloas blocks never carry a signed execution payload bid, so presence here means the
+  // parent block is Gloas and may have a matching envelope to inspect
+  public boolean hasParentSignedExecutionPayloadBid(final Bytes32 blockRoot) {
+    return getRecentlyImportedBlock(blockRoot)
+        .map(
+            block ->
+                block.getMessage().getBody().getOptionalSignedExecutionPayloadBid().isPresent())
+        .orElse(false);
+  }
+
   public Optional<UInt64> getGasLimitForExecutionPayload(
       final Bytes32 blockRoot, final Bytes32 blockHash) {
     return recentChainData.getExecutionGasLimitForBlockRootAndHash(blockRoot, blockHash);

@@ -513,6 +513,8 @@ public class ExecutionPayloadBidGossipValidatorTest {
         schemaDefinitions
             .getBuilderExitRequestSchema()
             .create(builder.getExecutionAddress(), builder.getPublicKey());
+    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
+        .thenReturn(true);
     when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
         .thenReturn(Optional.of(parentEnvelopeWithExits(matchingExit)));
     mockBidValidation(bidBuildingOnLatestPayload);
@@ -570,6 +572,8 @@ public class ExecutionPayloadBidGossipValidatorTest {
   @TestTemplate
   void shouldSaveForFuture_whenRequiredParentPayloadIsUnavailable() {
     final SignedExecutionPayloadBid bidBuildingOnLatestPayload = bidBuildingOnLatestPayload();
+    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
+        .thenReturn(true);
     when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
         .thenReturn(Optional.empty());
     mockBidValidation(bidBuildingOnLatestPayload);
@@ -579,6 +583,19 @@ public class ExecutionPayloadBidGossipValidatorTest {
             saveBidForFuture(
                 bidBuildingOnLatestPayload,
                 "parent execution payload is unavailable. Saving for future processing"));
+  }
+
+  @TestTemplate
+  void shouldAccept_whenParentPayloadIsUnavailableForPreGloasParent() {
+    final SignedExecutionPayloadBid bidBuildingOnLatestPayload = bidBuildingOnLatestPayload();
+    when(gossipValidationHelper.hasParentSignedExecutionPayloadBid(parentBlockRoot))
+        .thenReturn(false);
+    when(gossipValidationHelper.getRecentlyImportedExecutionPayload(parentBlockRoot))
+        .thenReturn(Optional.empty());
+    mockBidValidation(bidBuildingOnLatestPayload);
+
+    assertThatSafeFuture(bidValidator.validate(bidBuildingOnLatestPayload))
+        .isCompletedWithValue(ACCEPT);
   }
 
   @TestTemplate
