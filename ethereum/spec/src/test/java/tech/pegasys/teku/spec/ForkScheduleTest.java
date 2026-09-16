@@ -15,12 +15,14 @@ package tech.pegasys.teku.spec;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static tech.pegasys.teku.spec.config.SpecConfig.FAR_FUTURE_EPOCH;
 
 import org.junit.jupiter.api.Test;
 import tech.pegasys.teku.infrastructure.bytes.Bytes4;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.config.SpecConfig;
 import tech.pegasys.teku.spec.config.SpecConfigAltair;
+import tech.pegasys.teku.spec.config.SpecConfigAndParent;
 import tech.pegasys.teku.spec.config.SpecConfigLoader;
 import tech.pegasys.teku.spec.datastructures.state.Fork;
 import tech.pegasys.teku.spec.datastructures.util.ForkAndSpecMilestone;
@@ -101,6 +103,32 @@ public class ForkScheduleTest {
 
     assertThat(forkSchedule.size()).isEqualTo(1);
     assertThat(forkSchedule.getSpecMilestoneAtEpoch(UInt64.ZERO)).isEqualTo(SpecMilestone.PHASE0);
+  }
+
+  @Test
+  public void build_shouldKeepFarFutureMilestoneSupportedButNotActive() {
+    final UInt64 gloasForkEpoch = UInt64.ONE;
+    final SpecConfigAndParent<? extends SpecConfig> config =
+        SpecConfigLoader.loadConfig(
+            Eth2Network.MINIMAL.configName(),
+            builder ->
+                builder
+                    .altairForkEpoch(UInt64.ZERO)
+                    .bellatrixForkEpoch(UInt64.ZERO)
+                    .capellaForkEpoch(UInt64.ZERO)
+                    .denebForkEpoch(UInt64.ZERO)
+                    .electraForkEpoch(UInt64.ZERO)
+                    .fuluForkEpoch(FAR_FUTURE_EPOCH)
+                    .gloasForkEpoch(gloasForkEpoch));
+
+    final Spec spec = Spec.create(config, SpecMilestone.GLOAS);
+
+    assertThat(spec.forMilestone(SpecMilestone.FULU).getMilestone()).isEqualTo(SpecMilestone.FULU);
+    assertThat(spec.getForkSchedule().getActiveMilestones())
+        .extracting(ForkAndSpecMilestone::getSpecMilestone)
+        .containsExactly(SpecMilestone.ELECTRA, SpecMilestone.GLOAS);
+    assertThat(spec.atEpoch(UInt64.ZERO).getMilestone()).isEqualTo(SpecMilestone.ELECTRA);
+    assertThat(spec.atEpoch(gloasForkEpoch).getMilestone()).isEqualTo(SpecMilestone.GLOAS);
   }
 
   @Test

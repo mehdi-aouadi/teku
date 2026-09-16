@@ -14,6 +14,7 @@
 package tech.pegasys.teku.spec;
 
 import static com.google.common.base.Preconditions.checkState;
+import static tech.pegasys.teku.spec.config.SpecConfig.FAR_FUTURE_EPOCH;
 
 import com.google.common.io.Resources;
 import java.nio.charset.StandardCharsets;
@@ -238,6 +239,10 @@ public class ForkSchedule {
 
       // Current fork info
       final UInt64 forkEpoch = maybeForkEpoch.get();
+      if (forkEpoch.equals(FAR_FUTURE_EPOCH)) {
+        // The milestone is supported, but it has no active scheduled transition.
+        return;
+      }
       final Bytes4 forkVersion = maybeForkVersion.get();
       final UInt64 forkSlot = spec.miscHelpers().computeStartSlotAtEpoch(forkEpoch);
       final UInt64 genesisOffset = spec.miscHelpers().computeTimeAtSlot(UInt64.ZERO, forkSlot);
