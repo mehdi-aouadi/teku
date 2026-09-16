@@ -192,9 +192,6 @@ public class SyncCommitteeMessageValidator {
           reject("Rejecting sync committee message because the validator index is unknown"));
     }
 
-    /*
-     * [REJECT] The message is valid for the message beacon_block_root for the validator referenced by validator_index.
-     */
     final ForkInfo forkInfo =
         new ForkInfo(spec.fork(messageEpoch), state.getGenesisValidatorsRoot());
     final Bytes32 signingRoot =
