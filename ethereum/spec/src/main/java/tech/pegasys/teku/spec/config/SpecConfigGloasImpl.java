@@ -159,7 +159,7 @@ public class SpecConfigGloasImpl extends DelegatingSpecConfigFulu implements Spe
   }
 
   @Override
-  public int getPtcSize() {
+  public int getPayloadTimelinessCommitteeSize() {
     return ptcSize;
   }
 
