@@ -57,9 +57,9 @@ import tech.pegasys.teku.ethereum.json.types.node.PeerCount;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.BeaconCommitteeSelectionProof;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSelectionProof;
@@ -399,7 +399,7 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
         epoch.isGreaterThan(spec.getCurrentEpoch(state))
             ? spec.atEpoch(epoch).getBeaconStateUtil().getCurrentDutyDependentRoot(state)
             : spec.atEpoch(epoch).getBeaconStateUtil().getPreviousDutyDependentRoot(state);
-    final List<PayloadTimelinessCommitteeDuty> duties = new ArrayList<>();
+    final List<PtcDuty> duties = new ArrayList<>();
     final Int2ObjectMap<UInt64> validatorIndexToPayloadTimelinessCommitteeAssignmentMap =
         spec.getValidatorIndexToPtcAssignmentMap(state, epoch);
     validatorIndices.forEach(
@@ -412,7 +412,7 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
                 .ifPresent(
                     publicKey ->
                         duties.add(
-                            new PayloadTimelinessCommitteeDuty(
+                            new PtcDuty(
                                 publicKey, validatorIndex, payloadTimelinessCommitteeDutySlot)));
           }
         });

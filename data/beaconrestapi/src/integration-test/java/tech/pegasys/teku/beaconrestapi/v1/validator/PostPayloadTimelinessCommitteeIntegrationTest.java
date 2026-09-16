@@ -34,7 +34,7 @@ import tech.pegasys.teku.beacon.sync.events.SyncState;
 import tech.pegasys.teku.beaconrestapi.AbstractDataBackedRestAPIIntegrationTest;
 import tech.pegasys.teku.beaconrestapi.handlers.v1.validator.PostPayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.SpecMilestone;
@@ -72,9 +72,7 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     final DataStructureUtil dataStructureUtil = new DataStructureUtil(spec);
     when(syncService.getCurrentSyncState()).thenReturn(SyncState.IN_SYNC);
     final Bytes32 dependentRoot = dataStructureUtil.randomBytes32();
-    final PayloadTimelinessCommitteeDuty duty =
-        new PayloadTimelinessCommitteeDuty(
-            VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
+    final PtcDuty duty = new PtcDuty(VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
     final SafeFuture<Optional<PayloadTimelinessCommittee>> out =
         SafeFuture.completedFuture(
             Optional.of(new PayloadTimelinessCommittee(false, dependentRoot, List.of(duty))));
@@ -100,9 +98,7 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     when(syncService.getCurrentSyncState()).thenReturn(SyncState.IN_SYNC);
     final Bytes32 dependentRoot = dataStructureUtil.randomBytes32();
     final UInt64 nextEpoch = UInt64.valueOf(2);
-    final PayloadTimelinessCommitteeDuty duty =
-        new PayloadTimelinessCommitteeDuty(
-            VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
+    final PtcDuty duty = new PtcDuty(VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
     final SafeFuture<Optional<PayloadTimelinessCommittee>> out =
         SafeFuture.completedFuture(
             Optional.of(new PayloadTimelinessCommittee(false, dependentRoot, List.of(duty))));

@@ -20,33 +20,21 @@ import tech.pegasys.teku.bls.BLSPublicKey;
 import tech.pegasys.teku.infrastructure.json.types.DeserializableTypeDefinition;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 
-public record PayloadTimelinessCommitteeDuty(
-    BLSPublicKey publicKey, UInt64 validatorIndex, UInt64 slot) {
+public record PtcDuty(BLSPublicKey publicKey, UInt64 validatorIndex, UInt64 slot) {
 
-  public static final DeserializableTypeDefinition<PayloadTimelinessCommitteeDuty>
-      PTC_DUTY_TYPE_DEFINITION =
-          DeserializableTypeDefinition.object(
-                  PayloadTimelinessCommitteeDuty.class,
-                  PayloadTimelinessCommitteeDuty.Builder.class)
-              .name("PayloadTimelinessCommitteeDuty")
-              .initializer(PayloadTimelinessCommitteeDuty.Builder::new)
-              .finisher(PayloadTimelinessCommitteeDuty.Builder::build)
-              .withField(
-                  "pubkey",
-                  PUBLIC_KEY_TYPE,
-                  PayloadTimelinessCommitteeDuty::publicKey,
-                  PayloadTimelinessCommitteeDuty.Builder::publicKey)
-              .withField(
-                  "validator_index",
-                  UINT64_TYPE,
-                  PayloadTimelinessCommitteeDuty::validatorIndex,
-                  PayloadTimelinessCommitteeDuty.Builder::validatorIndex)
-              .withField(
-                  "slot",
-                  UINT64_TYPE,
-                  PayloadTimelinessCommitteeDuty::slot,
-                  PayloadTimelinessCommitteeDuty.Builder::slot)
-              .build();
+  public static final DeserializableTypeDefinition<PtcDuty> PTC_DUTY_TYPE_DEFINITION =
+      DeserializableTypeDefinition.object(PtcDuty.class, PtcDuty.Builder.class)
+          .name("PtcDuty")
+          .initializer(PtcDuty.Builder::new)
+          .finisher(PtcDuty.Builder::build)
+          .withField("pubkey", PUBLIC_KEY_TYPE, PtcDuty::publicKey, PtcDuty.Builder::publicKey)
+          .withField(
+              "validator_index",
+              UINT64_TYPE,
+              PtcDuty::validatorIndex,
+              PtcDuty.Builder::validatorIndex)
+          .withField("slot", UINT64_TYPE, PtcDuty::slot, PtcDuty.Builder::slot)
+          .build();
 
   public static class Builder {
 
@@ -69,8 +57,8 @@ public record PayloadTimelinessCommitteeDuty(
       return this;
     }
 
-    public PayloadTimelinessCommitteeDuty build() {
-      return new PayloadTimelinessCommitteeDuty(publicKey, validatorIndex, slot);
+    public PtcDuty build() {
+      return new PtcDuty(publicKey, validatorIndex, slot);
     }
   }
 }

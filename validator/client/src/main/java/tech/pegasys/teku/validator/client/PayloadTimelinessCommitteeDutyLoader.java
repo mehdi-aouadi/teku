@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.apache.tuweni.bytes.Bytes32;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.validator.api.ValidatorApiChannel;
@@ -67,7 +67,7 @@ public class PayloadTimelinessCommitteeDutyLoader
 
   private void scheduleDuty(
       final SlotBasedScheduledDuties<PayloadAttestationProductionDuty, Duty> scheduledDuties,
-      final PayloadTimelinessCommitteeDuty duty) {
+      final PtcDuty duty) {
     validators
         .getValidator(duty.publicKey())
         .ifPresent(

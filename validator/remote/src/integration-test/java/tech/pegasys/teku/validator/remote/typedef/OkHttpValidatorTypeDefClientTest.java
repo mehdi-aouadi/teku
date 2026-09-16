@@ -70,7 +70,7 @@ import tech.pegasys.teku.ethereum.json.types.beacon.StateValidatorData;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSubnetSubscription;
@@ -573,9 +573,9 @@ class OkHttpValidatorTypeDefClientTest extends AbstractTypeDefRequestTestBase {
   public void postPtcDuties_whenSuccess_returnsResponse()
       throws JsonProcessingException, InterruptedException {
     assumeThat(specMilestone).isEqualTo(GLOAS);
-    final List<PayloadTimelinessCommitteeDuty> duties =
+    final List<PtcDuty> duties =
         List.of(
-            new PayloadTimelinessCommitteeDuty(
+            new PtcDuty(
                 dataStructureUtil.randomPublicKey(),
                 dataStructureUtil.randomValidatorIndex(),
                 dataStructureUtil.randomSlot()));

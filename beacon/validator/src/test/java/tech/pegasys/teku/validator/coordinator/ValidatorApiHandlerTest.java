@@ -74,9 +74,9 @@ import tech.pegasys.teku.ethereum.json.types.beacon.StateValidatorData;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSubnetSubscription;
 import tech.pegasys.teku.ethereum.performance.trackers.BlockProductionAndPublishingPerformanceFactory;
@@ -1482,11 +1482,11 @@ class ValidatorApiHandlerTest {
     final Optional<PayloadTimelinessCommittee> duties = assertCompletedSuccessfully(result);
     assertThat(duties.orElseThrow().duties())
         .containsExactly(
-            new PayloadTimelinessCommitteeDuty(
+            new PtcDuty(
                 state.getValidators().get(3).getPublicKey(),
                 UInt64.valueOf(3),
                 UInt64.valueOf(110)),
-            new PayloadTimelinessCommitteeDuty(
+            new PtcDuty(
                 state.getValidators().get(8).getPublicKey(),
                 UInt64.valueOf(8),
                 UInt64.valueOf(108)));

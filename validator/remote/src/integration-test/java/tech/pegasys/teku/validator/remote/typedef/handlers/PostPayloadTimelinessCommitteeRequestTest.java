@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import tech.pegasys.teku.api.exceptions.RemoteServiceNotAvailableException;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.http.RestApiConstants;
 import tech.pegasys.teku.infrastructure.json.JsonUtil;
 import tech.pegasys.teku.infrastructure.json.types.DeserializableTypeDefinition;
@@ -77,9 +77,9 @@ public class PostPayloadTimelinessCommitteeRequestTest extends AbstractTypeDefRe
 
   @TestTemplate
   void canDeserializeResponse() throws Exception {
-    final List<PayloadTimelinessCommitteeDuty> duties =
+    final List<PtcDuty> duties =
         List.of(
-            new PayloadTimelinessCommitteeDuty(
+            new PtcDuty(
                 dataStructureUtil.randomPublicKey(),
                 dataStructureUtil.randomValidatorIndex(),
                 dataStructureUtil.randomSlot()));

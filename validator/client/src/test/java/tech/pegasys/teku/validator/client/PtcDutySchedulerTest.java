@@ -32,7 +32,7 @@ import tech.pegasys.teku.spec.SpecMilestone;
 import tech.pegasys.teku.spec.TestSpecFactory;
 import tech.pegasys.teku.validator.client.duties.SlotBasedScheduledDuties;
 
-class PayloadTimelinessCommitteeDutySchedulerTest {
+class PtcDutySchedulerTest {
 
   private static final UInt64 SLOT = UInt64.valueOf(42);
 

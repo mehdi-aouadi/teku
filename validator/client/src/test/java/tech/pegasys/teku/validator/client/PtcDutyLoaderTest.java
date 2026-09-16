@@ -28,7 +28,7 @@ import org.apache.tuweni.bytes.Bytes32;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty;
+import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.Spec;
@@ -41,7 +41,7 @@ import tech.pegasys.teku.validator.client.duties.SlotBasedScheduledDuties;
 import tech.pegasys.teku.validator.client.duties.payloadattestations.PayloadAttestationProductionDuty;
 import tech.pegasys.teku.validator.client.loader.OwnedValidators;
 
-class PayloadTimelinessCommitteeDutyLoaderTest {
+class PtcDutyLoaderTest {
 
   private final Spec spec = TestSpecFactory.createMinimalGloas();
   private final DataStructureUtil dataStructureUtil = new DataStructureUtil(spec);
@@ -85,11 +85,11 @@ class PayloadTimelinessCommitteeDutyLoaderTest {
                         false,
                         dependentRoot,
                         List.of(
-                            new PayloadTimelinessCommitteeDuty(
+                            new PtcDuty(
                                 validator1.getPublicKey(),
                                 UInt64.valueOf(validator1Index),
                                 UInt64.valueOf(9)),
-                            new PayloadTimelinessCommitteeDuty(
+                            new PtcDuty(
                                 validator2.getPublicKey(),
                                 UInt64.valueOf(validator2Index),
                                 UInt64.valueOf(10)))))));

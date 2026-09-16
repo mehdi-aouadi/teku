@@ -13,7 +13,7 @@
 
 package tech.pegasys.teku.ethereum.json.types.validator;
 
-import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuty.PTC_DUTY_TYPE_DEFINITION;
+import static tech.pegasys.teku.ethereum.json.types.validator.PtcDuty.PTC_DUTY_TYPE_DEFINITION;
 import static tech.pegasys.teku.infrastructure.http.RestApiConstants.DEPENDENT_ROOT;
 import static tech.pegasys.teku.infrastructure.http.RestApiConstants.EXECUTION_OPTIMISTIC;
 import static tech.pegasys.teku.infrastructure.json.types.CoreTypes.BOOLEAN_TYPE;
@@ -25,9 +25,7 @@ import org.apache.tuweni.bytes.Bytes32;
 import tech.pegasys.teku.infrastructure.json.types.DeserializableTypeDefinition;
 
 public record PayloadTimelinessCommittee(
-    boolean executionOptimistic,
-    Bytes32 dependentRoot,
-    List<PayloadTimelinessCommitteeDuty> duties) {
+    boolean executionOptimistic, Bytes32 dependentRoot, List<PtcDuty> duties) {
 
   public static final DeserializableTypeDefinition<PayloadTimelinessCommittee>
       PTC_DUTIES_TYPE_DEFINITION =
@@ -57,7 +55,7 @@ public record PayloadTimelinessCommittee(
 
     private boolean executionOptimistic;
     private Bytes32 dependentRoot;
-    private List<PayloadTimelinessCommitteeDuty> duties;
+    private List<PtcDuty> duties;
 
     public Builder executionOptimistic(final boolean executionOptimistic) {
       this.executionOptimistic = executionOptimistic;
@@ -69,7 +67,7 @@ public record PayloadTimelinessCommittee(
       return this;
     }
 
-    public Builder duties(final List<PayloadTimelinessCommitteeDuty> duties) {
+    public Builder duties(final List<PtcDuty> duties) {
       this.duties = duties;
       return this;
     }
