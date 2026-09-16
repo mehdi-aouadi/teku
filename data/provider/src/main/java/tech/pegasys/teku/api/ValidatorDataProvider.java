@@ -22,7 +22,7 @@ import org.apache.tuweni.bytes.Bytes32;
 import tech.pegasys.teku.api.exceptions.BadRequestException;
 import tech.pegasys.teku.bls.BLSSignature;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSubnetSubscription;
@@ -253,7 +253,7 @@ public class ValidatorDataProvider {
     return SafeFuture.of(() -> validatorApiChannel.getAttestationDuties(epoch, indices));
   }
 
-  public SafeFuture<Optional<PayloadTimelinessCommittee>> getPayloadTimelinessCommitteeDuties(
+  public SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> getPayloadTimelinessCommitteeDuties(
       final UInt64 epoch, final IntList indices) {
     return SafeFuture.of(
         () -> validatorApiChannel.getPayloadTimelinessCommitteeDuties(epoch, indices));

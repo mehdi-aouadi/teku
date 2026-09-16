@@ -15,7 +15,7 @@ package tech.pegasys.teku.beaconrestapi.handlers.v1.validator;
 
 import static tech.pegasys.teku.beaconrestapi.BeaconRestApiTypes.EPOCH_PARAMETER;
 import static tech.pegasys.teku.ethereum.json.types.SharedApiTypes.BODY_INTEGER_LIST;
-import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee.PTC_DUTIES_TYPE_DEFINITION;
+import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties.PTC_DUTIES_TYPE_DEFINITION;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_BAD_REQUEST;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_NO_CONTENT;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_OK;
@@ -31,7 +31,7 @@ import java.util.Optional;
 import tech.pegasys.teku.api.DataProvider;
 import tech.pegasys.teku.api.SyncDataProvider;
 import tech.pegasys.teku.api.ValidatorDataProvider;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.restapi.endpoints.AsyncApiResponse;
 import tech.pegasys.teku.infrastructure.restapi.endpoints.EndpointMetadata;
@@ -101,7 +101,7 @@ public class PostPayloadTimelinessCommitteeDuties extends RestApiEndpoint {
     final List<Integer> requestBody = request.getRequestBody();
     final IntList indices = IntArrayList.toList(requestBody.stream().mapToInt(Integer::intValue));
 
-    final SafeFuture<Optional<PayloadTimelinessCommittee>> future =
+    final SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> future =
         validatorDataProvider.getPayloadTimelinessCommitteeDuties(epoch, indices);
 
     request.respondAsync(

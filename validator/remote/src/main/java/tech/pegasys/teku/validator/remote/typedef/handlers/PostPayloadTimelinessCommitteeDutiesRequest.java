@@ -14,7 +14,7 @@
 package tech.pegasys.teku.validator.remote.typedef.handlers;
 
 import static tech.pegasys.teku.ethereum.json.types.SharedApiTypes.BODY_INTEGER_LIST;
-import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee.PTC_DUTIES_TYPE_DEFINITION;
+import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties.PTC_DUTIES_TYPE_DEFINITION;
 import static tech.pegasys.teku.validator.remote.apiclient.ValidatorApiMethod.GET_PTC_DUTIES;
 
 import java.util.Collection;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.infrastructure.http.RestApiConstants;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.validator.remote.typedef.ResponseHandler;
@@ -33,7 +33,7 @@ public class PostPayloadTimelinessCommitteeDutiesRequest extends AbstractTypeDef
     super(baseEndpoint, okHttpClient);
   }
 
-  public Optional<PayloadTimelinessCommittee> submit(
+  public Optional<PayloadTimelinessCommitteeDuties> submit(
       final UInt64 epoch, final Collection<Integer> validatorIndices) {
     return postJson(
         GET_PTC_DUTIES,

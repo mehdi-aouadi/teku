@@ -19,7 +19,7 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import org.apache.tuweni.bytes.Bytes32;
 import org.junit.jupiter.api.Test;
 
-class PayloadTimelinessCommitteeVoteTrackerTest {
+class PayloadTimelinessCommitteeDutiesVoteTrackerTest {
 
   private static final Bytes32 ROOT_1 = Bytes32.fromHexStringLenient("0x01");
   private static final Bytes32 ROOT_2 = Bytes32.fromHexStringLenient("0x02");

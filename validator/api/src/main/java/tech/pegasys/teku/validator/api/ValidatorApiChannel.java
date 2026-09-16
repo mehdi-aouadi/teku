@@ -27,7 +27,7 @@ import tech.pegasys.teku.ethereum.json.types.beacon.StateValidatorData;
 import tech.pegasys.teku.ethereum.json.types.node.PeerCount;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.BeaconCommitteeSelectionProof;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSelectionProof;
@@ -98,8 +98,9 @@ public interface ValidatorApiChannel extends BuilderApiChannel, ChannelInterface
         }
 
         @Override
-        public SafeFuture<Optional<PayloadTimelinessCommittee>> getPayloadTimelinessCommitteeDuties(
-            final UInt64 epoch, final IntCollection validatorIndices) {
+        public SafeFuture<Optional<PayloadTimelinessCommitteeDuties>>
+            getPayloadTimelinessCommitteeDuties(
+                final UInt64 epoch, final IntCollection validatorIndices) {
           return SafeFuture.completedFuture(Optional.empty());
         }
 
@@ -290,7 +291,7 @@ public interface ValidatorApiChannel extends BuilderApiChannel, ChannelInterface
 
   SafeFuture<Optional<ProposerDuties>> getProposerDuties(UInt64 epoch, boolean isFuluCompatible);
 
-  SafeFuture<Optional<PayloadTimelinessCommittee>> getPayloadTimelinessCommitteeDuties(
+  SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> getPayloadTimelinessCommitteeDuties(
       UInt64 epoch, IntCollection validatorIndices);
 
   SafeFuture<Optional<PeerCount>> getPeerCount();

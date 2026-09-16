@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee.PTC_DUTIES_TYPE_DEFINITION;
+import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties.PTC_DUTIES_TYPE_DEFINITION;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_BAD_REQUEST;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_OK;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_SERVICE_UNAVAILABLE;
@@ -33,14 +33,14 @@ import org.junit.jupiter.api.Test;
 import tech.pegasys.teku.beacon.sync.events.SyncState;
 import tech.pegasys.teku.beaconrestapi.AbstractDataBackedRestAPIIntegrationTest;
 import tech.pegasys.teku.beaconrestapi.handlers.v1.validator.PostPayloadTimelinessCommitteeDuties;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.SpecMilestone;
 import tech.pegasys.teku.spec.util.DataStructureUtil;
 
-public class PostPayloadTimelinessCommitteeIntegrationTest
+public class PostPayloadTimelinessCommitteeDutiesIntegrationTest
     extends AbstractDataBackedRestAPIIntegrationTest {
   @Test
   void shouldErrorIfPriorToGloas() throws IOException {
@@ -73,9 +73,9 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     when(syncService.getCurrentSyncState()).thenReturn(SyncState.IN_SYNC);
     final Bytes32 dependentRoot = dataStructureUtil.randomBytes32();
     final PtcDuty duty = new PtcDuty(VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
-    final SafeFuture<Optional<PayloadTimelinessCommittee>> out =
+    final SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> out =
         SafeFuture.completedFuture(
-            Optional.of(new PayloadTimelinessCommittee(false, dependentRoot, List.of(duty))));
+            Optional.of(new PayloadTimelinessCommitteeDuties(false, dependentRoot, List.of(duty))));
     when(validatorApiChannel.getPayloadTimelinessCommitteeDuties(eq(ONE), any())).thenReturn(out);
 
     final Response response =
@@ -84,7 +84,7 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     assertThat(responseBody).isNotEmpty();
     assertThat(response.code()).isEqualTo(SC_OK);
 
-    final PayloadTimelinessCommittee duties = parse(responseBody, PTC_DUTIES_TYPE_DEFINITION);
+    final PayloadTimelinessCommitteeDuties duties = parse(responseBody, PTC_DUTIES_TYPE_DEFINITION);
 
     assertThat(duties.dependentRoot()).isEqualTo(dependentRoot);
     assertThat(duties.executionOptimistic()).isFalse();
@@ -99,9 +99,9 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     final Bytes32 dependentRoot = dataStructureUtil.randomBytes32();
     final UInt64 nextEpoch = UInt64.valueOf(2);
     final PtcDuty duty = new PtcDuty(VALIDATOR_KEYS.get(1).getPublicKey(), ONE, UInt64.valueOf(13));
-    final SafeFuture<Optional<PayloadTimelinessCommittee>> out =
+    final SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> out =
         SafeFuture.completedFuture(
-            Optional.of(new PayloadTimelinessCommittee(false, dependentRoot, List.of(duty))));
+            Optional.of(new PayloadTimelinessCommitteeDuties(false, dependentRoot, List.of(duty))));
     when(validatorApiChannel.getPayloadTimelinessCommitteeDuties(eq(nextEpoch), any()))
         .thenReturn(out);
 
@@ -111,7 +111,7 @@ public class PostPayloadTimelinessCommitteeIntegrationTest
     assertThat(responseBody).isNotEmpty();
     assertThat(response.code()).isEqualTo(SC_OK);
 
-    final PayloadTimelinessCommittee duties = parse(responseBody, PTC_DUTIES_TYPE_DEFINITION);
+    final PayloadTimelinessCommitteeDuties duties = parse(responseBody, PTC_DUTIES_TYPE_DEFINITION);
 
     assertThat(duties.dependentRoot()).isEqualTo(dependentRoot);
     assertThat(duties.executionOptimistic()).isFalse();

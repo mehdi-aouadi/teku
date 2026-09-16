@@ -27,7 +27,7 @@ import java.util.Optional;
 import org.apache.tuweni.bytes.Bytes32;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
@@ -81,7 +81,7 @@ class PtcDutyLoaderTest {
         .thenReturn(
             SafeFuture.completedFuture(
                 Optional.of(
-                    new PayloadTimelinessCommittee(
+                    new PayloadTimelinessCommitteeDuties(
                         false,
                         dependentRoot,
                         List.of(

@@ -15,7 +15,7 @@ package tech.pegasys.teku.validator.remote.typedef.handlers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee.PTC_DUTIES_TYPE_DEFINITION;
+import static tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties.PTC_DUTIES_TYPE_DEFINITION;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_BAD_REQUEST;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_INTERNAL_SERVER_ERROR;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_NOT_FOUND;
@@ -31,7 +31,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import tech.pegasys.teku.api.exceptions.RemoteServiceNotAvailableException;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.http.RestApiConstants;
 import tech.pegasys.teku.infrastructure.json.JsonUtil;
@@ -44,7 +44,8 @@ import tech.pegasys.teku.validator.remote.apiclient.ValidatorApiMethod;
 import tech.pegasys.teku.validator.remote.typedef.AbstractTypeDefRequestTestBase;
 
 @TestSpecContext(milestone = SpecMilestone.GLOAS, network = Eth2Network.MINIMAL)
-public class PostPayloadTimelinessCommitteeRequestTest extends AbstractTypeDefRequestTestBase {
+public class PostPayloadTimelinessCommitteeDutiesRequestTest
+    extends AbstractTypeDefRequestTestBase {
 
   private PostPayloadTimelinessCommitteeDutiesRequest request;
   private UInt64 epoch;
@@ -83,15 +84,16 @@ public class PostPayloadTimelinessCommitteeRequestTest extends AbstractTypeDefRe
                 dataStructureUtil.randomPublicKey(),
                 dataStructureUtil.randomValidatorIndex(),
                 dataStructureUtil.randomSlot()));
-    final PayloadTimelinessCommittee expectedResponse =
-        new PayloadTimelinessCommittee(true, dataStructureUtil.randomBytes32(), duties);
+    final PayloadTimelinessCommitteeDuties expectedResponse =
+        new PayloadTimelinessCommitteeDuties(true, dataStructureUtil.randomBytes32(), duties);
 
     mockWebServer.enqueue(
         new MockResponse()
             .setResponseCode(SC_OK)
             .setBody(JsonUtil.serialize(expectedResponse, PTC_DUTIES_TYPE_DEFINITION)));
 
-    final Optional<PayloadTimelinessCommittee> response = request.submit(epoch, validatorIndices);
+    final Optional<PayloadTimelinessCommitteeDuties> response =
+        request.submit(epoch, validatorIndices);
 
     assertThat(response).contains(expectedResponse);
   }

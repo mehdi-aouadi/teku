@@ -24,31 +24,32 @@ import java.util.List;
 import org.apache.tuweni.bytes.Bytes32;
 import tech.pegasys.teku.infrastructure.json.types.DeserializableTypeDefinition;
 
-public record PayloadTimelinessCommittee(
+public record PayloadTimelinessCommitteeDuties(
     boolean executionOptimistic, Bytes32 dependentRoot, List<PtcDuty> duties) {
 
-  public static final DeserializableTypeDefinition<PayloadTimelinessCommittee>
+  public static final DeserializableTypeDefinition<PayloadTimelinessCommitteeDuties>
       PTC_DUTIES_TYPE_DEFINITION =
           DeserializableTypeDefinition.object(
-                  PayloadTimelinessCommittee.class, PayloadTimelinessCommittee.Builder.class)
+                  PayloadTimelinessCommitteeDuties.class,
+                  PayloadTimelinessCommitteeDuties.Builder.class)
               .name("GetPtcDutiesResponse")
-              .initializer(PayloadTimelinessCommittee.Builder::new)
-              .finisher(PayloadTimelinessCommittee.Builder::build)
+              .initializer(PayloadTimelinessCommitteeDuties.Builder::new)
+              .finisher(PayloadTimelinessCommitteeDuties.Builder::build)
               .withField(
                   DEPENDENT_ROOT,
                   BYTES32_TYPE,
-                  PayloadTimelinessCommittee::dependentRoot,
-                  PayloadTimelinessCommittee.Builder::dependentRoot)
+                  PayloadTimelinessCommitteeDuties::dependentRoot,
+                  PayloadTimelinessCommitteeDuties.Builder::dependentRoot)
               .withField(
                   EXECUTION_OPTIMISTIC,
                   BOOLEAN_TYPE,
-                  PayloadTimelinessCommittee::executionOptimistic,
-                  PayloadTimelinessCommittee.Builder::executionOptimistic)
+                  PayloadTimelinessCommitteeDuties::executionOptimistic,
+                  PayloadTimelinessCommitteeDuties.Builder::executionOptimistic)
               .withField(
                   "data",
                   listOf(PTC_DUTY_TYPE_DEFINITION),
-                  PayloadTimelinessCommittee::duties,
-                  PayloadTimelinessCommittee.Builder::duties)
+                  PayloadTimelinessCommitteeDuties::duties,
+                  PayloadTimelinessCommitteeDuties.Builder::duties)
               .build();
 
   public static class Builder {
@@ -72,8 +73,8 @@ public record PayloadTimelinessCommittee(
       return this;
     }
 
-    public PayloadTimelinessCommittee build() {
-      return new PayloadTimelinessCommittee(executionOptimistic, dependentRoot, duties);
+    public PayloadTimelinessCommitteeDuties build() {
+      return new PayloadTimelinessCommitteeDuties(executionOptimistic, dependentRoot, duties);
     }
   }
 }

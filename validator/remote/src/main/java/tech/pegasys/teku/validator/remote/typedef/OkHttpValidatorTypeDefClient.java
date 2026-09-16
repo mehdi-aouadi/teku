@@ -30,7 +30,7 @@ import tech.pegasys.teku.ethereum.json.types.beacon.StateValidatorData;
 import tech.pegasys.teku.ethereum.json.types.node.PeerCount;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.BeaconCommitteeSelectionProof;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.SyncCommitteeSelectionProof;
@@ -162,7 +162,7 @@ public class OkHttpValidatorTypeDefClient extends OkHttpValidatorMinimalTypeDefC
     return postAttesterDutiesRequest.submit(epoch, validatorIndices);
   }
 
-  public Optional<PayloadTimelinessCommittee> postPayloadTimelinessCommitteeDuties(
+  public Optional<PayloadTimelinessCommitteeDuties> postPayloadTimelinessCommitteeDuties(
       final UInt64 epoch, final Collection<Integer> validatorIndices) {
     final PostPayloadTimelinessCommitteeDutiesRequest postPayloadTimelinessCommitteeDutiesRequest =
         new PostPayloadTimelinessCommitteeDutiesRequest(getBaseEndpoint(), getOkHttpClient());

@@ -56,7 +56,7 @@ import tech.pegasys.teku.ethereum.json.types.beacon.StateValidatorData;
 import tech.pegasys.teku.ethereum.json.types.node.PeerCount;
 import tech.pegasys.teku.ethereum.json.types.validator.AttesterDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.BeaconCommitteeSelectionProof;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.ProposerDuty;
 import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
@@ -364,7 +364,7 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
   }
 
   @Override
-  public SafeFuture<Optional<PayloadTimelinessCommittee>> getPayloadTimelinessCommitteeDuties(
+  public SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> getPayloadTimelinessCommitteeDuties(
       final UInt64 epoch, final IntCollection validatorIndices) {
     if (isSyncActive()) {
       return NodeSyncingException.failedFuture();
@@ -393,7 +393,7 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
                     state -> getPtcDutiesFromIndicesAndState(state, epoch, validatorIndices)));
   }
 
-  private PayloadTimelinessCommittee getPtcDutiesFromIndicesAndState(
+  private PayloadTimelinessCommitteeDuties getPtcDutiesFromIndicesAndState(
       final BeaconState state, final UInt64 epoch, final IntCollection validatorIndices) {
     final Bytes32 dependentRoot =
         epoch.isGreaterThan(spec.getCurrentEpoch(state))
@@ -416,7 +416,7 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
                                 publicKey, validatorIndex, payloadTimelinessCommitteeDutySlot)));
           }
         });
-    return new PayloadTimelinessCommittee(
+    return new PayloadTimelinessCommitteeDuties(
         combinedChainDataClient.isChainHeadOptimistic(), dependentRoot, duties);
   }
 

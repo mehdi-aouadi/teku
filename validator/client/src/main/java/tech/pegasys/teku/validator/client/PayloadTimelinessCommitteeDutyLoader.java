@@ -17,7 +17,7 @@ import it.unimi.dsi.fastutil.ints.IntCollection;
 import java.util.Optional;
 import java.util.function.Function;
 import org.apache.tuweni.bytes.Bytes32;
-import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommittee;
+import tech.pegasys.teku.ethereum.json.types.validator.PayloadTimelinessCommitteeDuties;
 import tech.pegasys.teku.ethereum.json.types.validator.PtcDuty;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
@@ -28,7 +28,7 @@ import tech.pegasys.teku.validator.client.duties.payloadattestations.PayloadAtte
 import tech.pegasys.teku.validator.client.loader.OwnedValidators;
 
 public class PayloadTimelinessCommitteeDutyLoader
-    extends AbstractDutyLoader<PayloadTimelinessCommittee, SlotBasedScheduledDuties<?, ?>> {
+    extends AbstractDutyLoader<PayloadTimelinessCommitteeDuties, SlotBasedScheduledDuties<?, ?>> {
 
   private final ValidatorApiChannel validatorApiChannel;
   private final Function<Bytes32, SlotBasedScheduledDuties<PayloadAttestationProductionDuty, Duty>>
@@ -46,7 +46,7 @@ public class PayloadTimelinessCommitteeDutyLoader
   }
 
   @Override
-  protected SafeFuture<Optional<PayloadTimelinessCommittee>> requestDuties(
+  protected SafeFuture<Optional<PayloadTimelinessCommitteeDuties>> requestDuties(
       final UInt64 epoch, final IntCollection validatorIndices) {
     if (validatorIndices.isEmpty()) {
       return SafeFuture.completedFuture(Optional.empty());
@@ -56,7 +56,7 @@ public class PayloadTimelinessCommitteeDutyLoader
 
   @Override
   protected SafeFuture<SlotBasedScheduledDuties<?, ?>> scheduleAllDuties(
-      final UInt64 epoch, final PayloadTimelinessCommittee duties) {
+      final UInt64 epoch, final PayloadTimelinessCommitteeDuties duties) {
     final SlotBasedScheduledDuties<PayloadAttestationProductionDuty, Duty> scheduledDuties =
         scheduledDutiesFactory.apply(duties.dependentRoot());
 
@@ -83,6 +83,6 @@ public class PayloadTimelinessCommitteeDutyLoader
 
   @Override
   public String getDutyType() {
-    return "PayloadTimelinessCommittee";
+    return "PayloadTimelinessCommitteeDuties";
   }
 }
