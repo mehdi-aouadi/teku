@@ -855,7 +855,8 @@ public class ValidatorApiHandler implements ValidatorApiChannel, SlotEventsChann
             broadcastValidationLevel == GOSSIP && isLocallyCreated
                 ? EQUIVOCATION
                 : broadcastValidationLevel,
-            blockPublishingPerformance)
+            blockPublishingPerformance,
+            builderUrl)
         .exceptionally(
             ex -> {
               final String reason = getRootCauseMessage(ex);

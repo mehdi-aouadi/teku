@@ -323,11 +323,6 @@ public class BeaconStateAccessorsGloas extends BeaconStateAccessorsFulu {
   }
 
   @Override
-  public UInt64 getAttestationParentSlot(final BeaconState state) {
-    return BeaconStateGloas.required(state).getLatestExecutionPayloadBid().getSlot();
-  }
-
-  @Override
   protected boolean computeIsMatchingHead(
       final boolean isMatchingTarget,
       final boolean headRootMatches,
